@@ -1,17 +1,19 @@
 close all
 clear all
 clc
-
+addpath('../kalmanlib')
+addLibrary('../kalmanlib')
+rng(101) %fix the seed of the random generator for reproducibility
 %% real system
 % Car tracking example 4.3 from book Särkkä, S. (2013). Bayesian Filtering and Smoothing.
 % x=[x y dx dy] -> state vector
 % y=[x;y] -> measurement vector
-n=4; %number of states
-p=2; %number of measurements
+n=4; %dimension of state vector
+p=2; %dimension of measurement vector
 %% linear dynamic model
-dt=0.1;
-A=[1 0 dt 0;0 1 0 dt;0 0 1 0;0 0 0 1];
-H=[1 0 0 0;0 1 0 0];
+dt=0.1; %sample time
+A=[eye(2) eye(2)*dt;zeros(2) eye(2)];
+H=[eye(2) zeros(2)];
 %% statistic properties
 q1=1;
 q2=1;
@@ -24,7 +26,7 @@ R = nu*nu';
 N=500;
 %% initial condition
 x(:,1)=[0 0 1 1]';
-hx(:,1)=x(:,1);
+hx(:,1)=x(:,1); %no initial error
 y(:,1)=H*x(:,1)+nu*randn(p,1);
 P{1}=1e-3*eye(n);
 %% Monte Carlo Simulation
