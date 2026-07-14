@@ -78,7 +78,7 @@ lx2(1)=0;
 fill([F fliplr(F)],[lx fliplr(lx2)],[0.8500, 0.3250, 0.0980], 'FaceAlpha', 0.2,'linestyle','none');
 
 grid on
-xlabel('Tempo (k)')
+xlabel('Time (k)')
 ylabel('MSE_{dB}')
 axis([0 N min(10*log10(media2))-0.1*abs(min(10*log10(media2))) max(10*log10(media2))+0.1*abs(max(10*log10(media2)))])
 legend([p1,p2],'EKF','UKF')
