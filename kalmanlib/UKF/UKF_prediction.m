@@ -1,11 +1,11 @@
-function [hx,P] = UKF_prediction(f,hx0,P0,Q,UT,varargin)
+function [hx,P] = UKF_prediction(f,hx0,u,P0,Q,UT,varargin)
 %Additive-noise UKF
 n=size(P0,1);
 lambda=UT.alpha^2*(n+UT.kappa)-n;
 X=sigmaPoints(hx0,P0,lambda);
 %% Propagate the Sigma-points through non-linear map
 for i=1:2*n+1
-    X(:,i)=f(X(:,i));
+    X(:,i)=f(X(:,i),u);
 end
 Wm=[lambda/(lambda+n) ones(1,2*n)*(1/(2*(lambda+n)))]';
 Wc=[lambda/(lambda+n)+(1-UT.alpha^2+UT.beta) ones(1,2*n)*(1/(2*(lambda+n)))]';

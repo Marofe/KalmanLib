@@ -11,15 +11,15 @@ Wm=[lambda/(lambda+n) ones(1,2*n)*(1/(2*(lambda+n)))]';
 Wc=[lambda/(lambda+n)+(1-UT.alpha^2+UT.beta) ones(1,2*n)*(1/(2*(lambda+n)))]';
 hy=Y*Wm;
 epsy=Y-hy;
-epsx=X-hx0';
+epsx=X-hx0;
 S=epsy*diag(Wc)*epsy'+R;
 C=epsx*diag(Wc)*epsy';
 %%
 K=C/S;%Kalman Gain
-z=y'-hy; %innovation
+z=y-hy; %innovation
 v=K*z; % estimation variation
-hx=hx0+v'; %mean update
+hx=hx0+v; %mean update
 P=P0-K*S*K'; %covariance update
-P=real(0.5*(P+P'));
+P=0.5*(P+P');
 end
 

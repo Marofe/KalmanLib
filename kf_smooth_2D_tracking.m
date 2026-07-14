@@ -1,8 +1,7 @@
 close all
 clear all
 clc
-addpath('../kalmanlib')
-addLibrary('../kalmanlib')
+addLibrary('kalmanlib')
 rng(101) %fix the seed of the random generator for reproducibility
 %% real system
 % Car tracking example 4.3 from book Särkkä, S. (2013). Bayesian Filtering and Smoothing.

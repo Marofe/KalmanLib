@@ -15,7 +15,7 @@ for j=1:Np
             i=1;
         end
     end
-    p(j,:)=p0(i,:);
+    p(:,j)=p0(:,i);
 end
 w=1/Np*ones(Np,1);
 end

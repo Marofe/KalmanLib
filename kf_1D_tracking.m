@@ -1,19 +1,18 @@
 close all
 clear all
 clc
-addpath('../kalmanlib')
-addLibrary('../kalmanlib')
 rng(101) %fix the seed of the random generator for reproducibility
 %% System
-% 1D tracking example 
+% 1D tracking example
 % x=[p v] -> state vector
 % y=p -> measurement vector
 n=2; %dimension of state vector
 m=1; %dimension of measurement vector
 %% linear dynamic model
 dt=1; %sample time
-A=[1 dt;0 1];
-G=[0;1]; 
+A=[1 dt;...
+   0 1];
+G=[0;1];
 H=[1 0];
 %% Noise Properties
 Q=.1^2; %process noise cov (velocity fluctuation)
@@ -32,15 +31,21 @@ P=zeros(n,n,N);
 x(:,1)=[90 3]'; %true
 hx(:,1)=[100 5]'; %initial guess
 P(:,:,1)=diag([5^2,1^2]);
-sys=struct('A',A,'H',H,'Q',G*Q*G','R',R);
+Q=G*Q*G';
 %% Simulation
-    for k=1:N-1
-        %% true system
-        x(:,k+1)=A*x(:,k)+G*stdQ*randn;
-        y(:,k+1)=H*x(:,k+1)+stdR*randn(m,1);
-        %% Kalman Filter
-        [hx(:,k+1) P(:,:,k+1)]=kalmanFilter(hx(:,k),P(:,:,k),y(:,k+1),sys);
-    end
+for k=1:N-1
+    %% true system (ground truth)
+    x(:,k+1)=A*x(:,k)+G*stdQ*randn;
+    y(:,k+1)=H*x(:,k+1)+stdR*randn(m,1);
+    %% Kalman Filter
+    % Prediction Step (time-update)
+    hx(:,k+1)=A*hx(:,k);
+    P(:,:,k+1)=A*P(:,:,k)*A'+Q;
+    % Update Step (measurement-update)
+    K=P(:,:,k+1)*H'/(R+H*P(:,:,k+1)*H'); %Kalman Gain
+    hx(:,k+1)=hx(:,k+1)+K*(y(:,k+1)-H*hx(:,k+1));
+    P(:,:,k+1)=(eye(size(hx,1))-K*H)*P(:,:,k+1);
+end
 %% plot
 figure
 subplot(2,1,1)
