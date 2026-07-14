@@ -27,7 +27,7 @@ yr=0;
 H=[eye(2) zeros(2)];
 
 %% define state covariance matrix (model accuracy)
-Q=eye(4)*10e-5;
+Q=blkdiag(zeros(2),eye(2)*10e-5);
 
 %define sensor covariance matrix (sensor quality)
 R=0.01*eye(2);
@@ -121,7 +121,7 @@ scale = 0.3; %arrow scale factor
 q1=quiver(x(1,idx), x(2,idx), scale*x(3,idx), scale*x(4,idx), 0, ...
     'Color',[0, 0.4470, 0.7410],'LineWidth',1.5,'MaxHeadSize',1.0);
 q2=quiver(hx(1,idx), hx(2,idx), scale*hx(3,idx), scale*hx(4,idx), 0, ...
-    'Color',[0.8500, 0.3250, 0.0980],'LineWidth',1.5,'MaxHeadSize',1.0,'LineStyle','--');
+    'Color',[0.8500, 0.3250, 0.0980],'LineWidth',1.5,'MaxHeadSize',1.0);
 grid on
 legend('Real trajectory','KF trajectory','Real velocity','KF velocity')
 title('Trajectory with Velocity Vectors')
